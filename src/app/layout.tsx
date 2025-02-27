@@ -1,16 +1,34 @@
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+
+import { Roboto } from 'next/font/google';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from '../theme';
+
+const roboto = Roboto({
+ weight: ['300', '400', '500', '700'],
+ subsets: ['latin'],
+ display: 'swap',
+  variable: '--font-roboto',
+});
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// import { ModalProvider } from './(authenticated)/_components/_commons/Modal';
+import { ModalProvider } from '@/_modules/_contexts/ModalProvider';
+import ReduxProvider from '@/_modules/_providers/ReduxProvider';
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
+
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,11 +41,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en">    
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        id="__next"
+        className={roboto.variable}
+        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ReduxProvider>
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>
+              <ModalProvider>
+              <CssBaseline />
+                {children}
+              </ModalProvider>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
